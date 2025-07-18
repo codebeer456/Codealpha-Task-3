@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Music Player</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #1c1b2f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .player {
+      background: #2d2c4a;
+      padding: 30px;
+      border-radius: 20px;
+      width: 360px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    .btn {
+      background: #4c4cff;
+      border: none;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #6a6aff;
+    }
+    .playlist {
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+    .playlist div {
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .playlist div:hover,
+    .playlist .active {
+      background: #3c3c5c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="player">
+    <h2 id="now-playing">Now Playing: None</h2>
+    <audio id="audio" controls></audio>
+
+    <div class="controls">
+      <button class="btn" onclick="prevSong()">Prev</button>
+      <button class="btn" onclick="nextSong()">Next</button>
+    </div>
+
+    <div class="playlist" id="playlist"></div>
+  </div>
+
+  <script>
+    const playlist = [
+      { name: "Song 1", file: "" },
+      { name: "Song 2", file: "" },
+      { name: "Song 3", file: "" },
+      { name: "Song 4", file: "" },
+      { name: "Song 5", file: "" },
+      { name: "Song 6", file: "" },
+      { name: "Song 7", file: "" },
+      { name: "Song 8", file: "" },
+      { name: "Song 9", file: "" },
+      { name: "Song 10", file: "" },
+      { name: "Song 11", file: "" },
+      { name: "Song 12", file: "" },
+      { name: "Song 13", file: "" },
+      { name: "Song 14", file: "" },
+      { name: "Song 15", file: "" },
+      { name: "Song 16", file: "" },
+      { name: "Song 17", file: "" },
+      { name: "Song 18", file: "" },
+      { name: "Song 19", file: "" },
+      { name: "Song 20", file: "" },
+      { name: "Song 21", file: "" },
+      { name: "Song 22", file: "" },
+      { name: "Song 23", file: "" },
+      { name: "Song 24", file: "" },
+      { name: "Song 25", file: "" },
+      { name: "Song 26", file: "" },
+      { name: "Song 27", file: "" },
+      { name: "Song 28", file: "" },
+      { name: "Song 29", file: "" },
+      { name: "Song 30", file: "" },
+      { name: "Song 31", file: "" },
+      { name: "Song 32", file: "" },
+      { name: "Song 33", file: "" },
+      { name: "Song 34", file: "" },
+      { name: "Song 35", file: "" },
+      { name: "Song 36", file: "" },
+      { name: "Song 37", file: "" },
+      { name: "Song 38", file: "" },
+      { name: "Song 39", file: "" },
+      { name: "Song 40", file: "" }
+    ];
+
+    let currentIndex = Math.floor(Math.random() * playlist.length); // 👈 random song
+    const audio = document.getElementById("audio");
+    const nowPlaying = document.getElementById("now-playing");
+    const playlistDiv = document.getElementById("playlist");
+
+    function loadSong(index) {
+      const song = playlist[index];
+      audio.src = song.file;
+      nowPlaying.textContent = "Now Playing: " + song.name;
+      highlightCurrentSong();
+      audio.play();
+    }
+
+    function highlightCurrentSong() {
+      const items = playlistDiv.querySelectorAll("div");
+      items.forEach((item, i) => {
+        item.className = i === currentIndex ? "active" : "";
+      });
+    }
+
+    function nextSong() {
+      currentIndex = (currentIndex + 1) % playlist.length;
+      loadSong(currentIndex);
+    }
+
+    function prevSong() {
+      currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+      loadSong(currentIndex);
+    }
+
+    // Render playlist
+    playlist.forEach((song, index) => {
+      const div = document.createElement("div");
+      div.textContent = song.name;
+      div.onclick = () => {
+        currentIndex = index;
+        loadSong(index);
+      };
+      playlistDiv.appendChild(div);
+    });
+
+    // Autoplay random song on load
+    window.onload = () => {
+      loadSong(currentIndex);
+    };
+
+    audio.addEventListener("ended", nextSong);
+  </script>
+
+</body>
+</html>
